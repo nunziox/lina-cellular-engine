@@ -19,8 +19,8 @@ from libautomata import GOLEvolutionModel, CellularGrid
 #
 # Constaints
 #
-SCALE = 20                    # PIXELS SCALE FACTOR
-FPS   = 10                    # FRAME RATE
+SCALE = 20 # PIXELS SCALE FACTOR
+FPS   = 25 # FRAME RATE
 
 #
 # Shows cellular grid to the screen
@@ -45,7 +45,11 @@ if __name__ == "__main__":
   pygame.display.flip()
   clock         = pygame.time.Clock()
   index         = -1
-  fn = [GOLEvolutionModel.PT_GLIDER, GOLEvolutionModel.PT_TRIO, GOLEvolutionModel.PT_PULSAR,  GOLEvolutionModel.PT_GOSPEL]
+  fn = [GOLEvolutionModel.PT_GLIDER, 
+        GOLEvolutionModel.PT_TRIO, 
+        GOLEvolutionModel.PT_PULSAR, 
+        GOLEvolutionModel.PT_GOSPEL,
+        GOLEvolutionModel.PT_PERIOD]
   while True:
     if cellular_grid is not None: 
       render(screen, surface, cellular_grid.array, SCALE)
