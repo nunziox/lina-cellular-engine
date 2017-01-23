@@ -61,6 +61,10 @@ class CellularGrid:
     self.model = model
     self.sizeX = sizeX
     self.sizeY = sizeY
+    self.startX = sizeX
+    self.startY = sizeY
+    self.finalX = sizeX
+    self.finalY = sizeY
     self.array = None
     self.reset()
 
@@ -75,8 +79,8 @@ class CellularGrid:
     Evolves the grid to the next state
     """
     newpoints = []
-    for i in range(self.sizeY):
-      for j in range(self.sizeX):
+    for i in range(self.startY,self.finalY):
+      for j in range(self.startX,self.finalX):
         t = self.sizeY -1 if i-1 == -1 else i-1
         k = self.sizeX -1 if j-1 == -1 else j-1
         wsum = self.array[t][j]                                   + \
@@ -88,7 +92,12 @@ class CellularGrid:
                self.array[i][(j+1) % self.sizeX]                  + \
                self.array[i][k]
         state = self.model.check(self.array[i][j], wsum)
-        if state != self.array[i][j]: newpoints.append((i,j, state))
+        if state != self.array[i][j]: 
+          newpoints.append((i,j, state))
+          if i < self.startY: self.startY = i
+          if i > self.finalY: self.finalY = i
+          if j < self.startX: self.startX = j
+          if j > self.finalX: self.finalX = j
     for elem in newpoints:
       self.array[elem[0]][elem[1]] = elem[2]
 
@@ -98,6 +107,10 @@ class CellularGrid:
     """
     self.reset()
     for point in pattern:
+      if point[0] < self.startY: self.startY = point[0]
+      if point[0] > self.finalY: self.finalY = point[0]
+      if point[1] < self.startX: self.startX = point[1]
+      if point[1] > self.finalX: self.finalX = point[1]
       self.array[point[0]+off[0]][point[1]+off[1]] = CellularGrid.ALIVE
 
   def getPatternCenterPosition(self, pattern):

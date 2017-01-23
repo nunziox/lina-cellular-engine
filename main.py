@@ -14,20 +14,20 @@ import time
 import random
 import copy
 
-from libautomata import GOLEvolutionModel, CellularGrid
+from liblina import GOLEvolutionModel, CellularGrid
 
 #
 # Constaints
 #
-SCALE = 20 # PIXELS SCALE FACTOR
+SCALE = 5 # PIXELS SCALE FACTOR
 FPS   = 25 # FRAME RATE
 
 #
 # Shows cellular grid to the screen
 #
-def render(screen, surface, grid, scale):
-  for i in range(len(grid)):
-    for j in range(len(grid[0])):
+def render(screen, surface, portion, grid, scale):
+  for i in range(portion[0], portion[1]):
+    for j in range(portion[2], portion[3]):
       color = (0,0,0) if grid[i][j] == 0 else (255,255,255)
       pygame.draw.rect(surface, color, pygame.Rect(j*scale,i*scale,j*scale+scale,i*scale+scale))
   screen.blit(surface, (0,0))
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         GOLEvolutionModel.PT_PERIOD]
   while True:
     if cellular_grid is not None: 
-      render(screen, surface, cellular_grid.array, SCALE)
+      render(screen, surface,(cellular_grid.startY,cellular_grid.finalY,cellular_grid.startX,cellular_grid.finalX),cellular_grid.array, SCALE)
     cellular_grid.evolve()
     for event in pygame.event.get():
       if event.type == pygame.QUIT or event.type == pygame.K_ESCAPE:
