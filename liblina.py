@@ -7,6 +7,7 @@ __maintainer__ = "Nunzio Meli"
 __email__      = "nunziomeli5@gmail.com"
 __status__     = "Production"
 
+
 class GOLEvolutionModel:
   """
   Describes the evolution rules of the cellular grid.
@@ -61,12 +62,15 @@ class CellularGrid:
     self.model = model
     self.sizeX = sizeX
     self.sizeY = sizeY
-    self.startX = sizeX
-    self.startY = sizeY
-    self.finalX = sizeX
-    self.finalY = sizeY
+    self._initBoardLimits()
     self.array = None
     self.reset()
+
+  def _initBoardLimits(self):
+    self.startX = self.sizeX
+    self.startY = self.sizeY
+    self.finalX = 0
+    self.finalY = 0
 
   def reset(self):
     """
@@ -79,8 +83,25 @@ class CellularGrid:
     Evolves the grid to the next state
     """
     newpoints = []
-    for i in range(self.startY,self.finalY):
-      for j in range(self.startX,self.finalX):
+    x0 = self.startX
+    x1 = self.finalX
+    y0 = self.startY
+    y1 = self.finalY
+    self._initBoardLimits()
+    if y1+2 > self.sizeY:
+      y0 = 0
+      y1 = self.sizeY
+    else:
+      y0 = y0 -1
+      y1 = y1 +2
+    if x1+2 > self.sizeX:
+      x0 = 0
+      x1 = self.sizeX
+    else:
+      x0 = x0 -1
+      x1 = x1 +2
+    for i in range(y0,y1):
+      for j in range(x0,x1):
         t = self.sizeY -1 if i-1 == -1 else i-1
         k = self.sizeX -1 if j-1 == -1 else j-1
         wsum = self.array[t][j]                                   + \
@@ -93,7 +114,7 @@ class CellularGrid:
                self.array[i][k]
         state = self.model.check(self.array[i][j], wsum)
         if state != self.array[i][j]: 
-          newpoints.append((i,j, state))
+          newpoints.append((i, j, state))
           if i < self.startY: self.startY = i
           if i > self.finalY: self.finalY = i
           if j < self.startX: self.startX = j
@@ -105,12 +126,12 @@ class CellularGrid:
     """
     Resets the grid and sets a new pattern in the board.
     """
-    self.reset()
+    self._initBoardLimits()
     for point in pattern:
-      if point[0] < self.startY: self.startY = point[0]
-      if point[0] > self.finalY: self.finalY = point[0]
-      if point[1] < self.startX: self.startX = point[1]
-      if point[1] > self.finalX: self.finalX = point[1]
+      if point[0]+off[0] < self.startY: self.startY = point[0]+off[0]
+      if point[0]+off[0] > self.finalY: self.finalY = point[0]+off[0]
+      if point[1]+off[1] < self.startX: self.startX = point[1]+off[1]
+      if point[1]+off[1] > self.finalX: self.finalX = point[1]+off[1]
       self.array[point[0]+off[0]][point[1]+off[1]] = CellularGrid.ALIVE
 
   def getPatternCenterPosition(self, pattern):

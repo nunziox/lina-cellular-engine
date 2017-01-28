@@ -19,19 +19,23 @@ from liblina import GOLEvolutionModel, CellularGrid
 #
 # Constaints
 #
-SCALE = 5 # PIXELS SCALE FACTOR
-FPS   = 25 # FRAME RATE
+SCALE = 2 # PIXELS SCALE FACTOR
+FPS   = 40 # FRAME RATE
 
 #
 # Shows cellular grid to the screen
 #
-def render(screen, surface, portion, grid, scale):
-  for i in range(portion[0], portion[1]):
-    for j in range(portion[2], portion[3]):
+def render(screen, surface, portion, grid, scale, color_mode = None):
+  print(portion[0],portion[1],portion[2],portion[3])
+  for i in range(portion[0], portion[1]+1):
+    for j in range(portion[2], portion[3]+1):
       color = (0,0,0) if grid[i][j] == 0 else (255,255,255)
-      pygame.draw.rect(surface, color, pygame.Rect(j*scale,i*scale,j*scale+scale,i*scale+scale))
+      if color_mode == "black":
+        color = (0,0,0)
+      pygame.draw.rect(surface, color, pygame.Rect(j*scale,i*scale,scale,scale))
   screen.blit(surface, (0,0))
   pygame.display.flip()
+
 
 #
 # Main
@@ -40,9 +44,8 @@ if __name__ == "__main__":
   pygame.init()
   screen = pygame.display.set_mode((0,0), pygame.FULLSCREEN)
   width, height = screen.get_size()
-  cellular_grid = CellularGrid(GOLEvolutionModel(), width / SCALE, height / SCALE)
   surface       = pygame.Surface(screen.get_size())
-  pygame.display.flip()
+  cellular_grid = None
   clock         = pygame.time.Clock()
   index         = -1
   fn = [GOLEvolutionModel.PT_GLIDER, 
@@ -53,15 +56,15 @@ if __name__ == "__main__":
   while True:
     if cellular_grid is not None: 
       render(screen, surface,(cellular_grid.startY,cellular_grid.finalY,cellular_grid.startX,cellular_grid.finalX),cellular_grid.array, SCALE)
-    cellular_grid.evolve()
+      cellular_grid.evolve()
     for event in pygame.event.get():
-      if event.type == pygame.QUIT or event.type == pygame.K_ESCAPE:
-        exit(0)
-      elif event.type == pygame.KEYDOWN:
-        index = (index + 1) % len(fn)
-        cellular_grid.setPattern(fn[index], cellular_grid.getPatternCenterPosition(fn[index]))
+      if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_ESCAPE:
           exit(0)
+        index = (index + 1) % len(fn)
+        cellular_grid = CellularGrid(GOLEvolutionModel(), width / SCALE, height / SCALE)
+        render(screen, surface,(0,cellular_grid.sizeY-1,0,cellular_grid.sizeX-1),cellular_grid.array, SCALE, "black")
+        cellular_grid.setPattern(fn[index], cellular_grid.getPatternCenterPosition(fn[index]))
     clock.tick(FPS)
 
 
