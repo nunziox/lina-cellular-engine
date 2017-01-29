@@ -37,6 +37,7 @@ class CellularGrid:
   """
   Describes the cellular logic.
   """
+
   #
   # Constaints
   #
@@ -44,9 +45,19 @@ class CellularGrid:
   DEAD  = 0 # PIXEL STATE DEAD
 
   def __init__(self, client, model, scale, fps):
+    """
+    Parameters:
+      client - the controller class
+      model  - the chosen evolution model
+      scale  - The pixel scale factor
+      fps    - The frame rate
+    ''
+    """
     self.client = client
     self.model = model
     self.scale = scale
+
+    # List used to store the pixels state
     self.point_list = []
 
     pygame.init()
@@ -58,11 +69,15 @@ class CellularGrid:
     self.sizeX = width  / self.scale
     self.sizeY = height / self.scale
     self.array = None
+
+    # Resets the board state
     self.reset()
 
+    # Call the init method in the ccontroller class
     self.client.init(self)
 
     while True:
+      # Call the loop method in the controller class
       self.client.loop(self)
       for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -71,10 +86,10 @@ class CellularGrid:
           self.client.keyPressEvent(self)
       clock.tick(fps)
 
-  #
-  # Shows cellular grid to the screen
-  #
   def render(self):
+    """
+    Renders the grid state on the screen using the pygame lib
+    """
     for elem in self.point_list:
       color = (0,0,0) if elem[2] == CellularGrid.DEAD else (255,255,255)
       pygame.draw.rect(self.surface, color, pygame.Rect(elem[1]*self.scale,elem[0]*self.scale,self.scale,self.scale))
@@ -83,7 +98,7 @@ class CellularGrid:
 
   def reset(self):
     """
-    Allows to reset the grid
+    Allows to reset the grid state
     """
     self.dead_list = []
     for elem in self.point_list:
@@ -138,12 +153,21 @@ class CellularGrid:
     """
     Resets the grid and sets a new pattern in the board.
     """
+    self.reset()
     self.point_list = []
     for point in pattern:
+      if point[0]+off[0] >= self.sizeY or point[1]+off[1] >= self.sizeX:
+        self.reset()
+        raise Exception("Invalid point in the pattern")
+        return
       self.point_list.append((point[0]+off[0],point[1]+off[1], CellularGrid.ALIVE))
       self.array[point[0]+off[0]][point[1]+off[1]] = CellularGrid.ALIVE
 
   def getPatternCenterPosition(self, pattern):
+    """
+    Returns the offset values along the two axes in order to place the pattern 
+    in the center of the screen
+    """
     a = [x[0] for x in pattern]
     b = [x[1] for x in pattern]
     weight = max(a) - min(a) + 1

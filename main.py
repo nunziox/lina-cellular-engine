@@ -10,19 +10,10 @@ __email__      = "nunziomeli5@gmail.com"
 __status__     = "Production"
 
 
-import time
-import random
-
 from liblina import GOLEvolutionModel, CellularGrid
 
-#
-# Constaints
-#
-SCALE = 20 # PIXELS SCALE FACTOR
-FPS   = 300 # FRAME RATE
 
-
-class Automata:
+class Controller:
   #
   # Patterns
   #
@@ -44,24 +35,34 @@ class Automata:
                       [7,41], [11,41], [12,41], [13,41], [6,42], [12,42], [3,49], [4,49], [14,49], [15,49],
                       [4,50], [14,50], [1,51], [2,51], [3,51], [15,51], [16,51], [17,51], [1,52], [17,52]]
 
+  #
+  # Use this method to init your variables
+  #
   def init(self, parent):
-    self.scene = [Automata.PT_GLIDER, Automata.PT_TRIO, Automata.PT_PULSAR, Automata.PT_GOSPEL, Automata.PT_PERIOD]
+    self.scene = [Controller.PT_GLIDER, Controller.PT_TRIO, Controller.PT_PULSAR, Controller.PT_GOSPEL, Controller.PT_PERIOD]
     self.index = -1
 
+  #
+  # This method is called by liblina engine each 1/FPS seconds.
+  #
   def loop(self, parent):
     parent.render()
     parent.evolve()
 
+  #
+  # This method is called by liblina engine each time a new key press event occurs.
+  #
   def keyPressEvent(self, parent):
     self.index = (self.index + 1) % len(self.scene)
-    parent.reset()
     parent.setPattern(self.scene[self.index], parent.getPatternCenterPosition(self.scene[self.index]))
 
 #
 # Main
 #
 if __name__ == "__main__":
-  CellularGrid(Automata(), GOLEvolutionModel(), SCALE, FPS)
+  scale = 5  # Each pixel in the grid will be 20 x 20 screen pixels
+  fps   = 300 # FRAME RATE (the loop method inside the controller will be called each 1/FPS seconds)
+  CellularGrid(Controller(), GOLEvolutionModel(), scale, fps)
 
 
 
