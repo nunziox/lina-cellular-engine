@@ -23,6 +23,7 @@ If it's the case:
 
 1) Define a new Contructor class ad shown below:
 
+'''python
 class Controller:
   #
   # Patterns
@@ -46,13 +47,16 @@ class Controller:
   #
   def keyPressEvent(self, parent):
     pass
+'''
 
 2) Start the liblina engine inside your main function as shown below:
 
+'''python
 if __name__ == "__main__":
   scale = 5  # Each pixel in the grid will be 20 x 20 screen pixels
   fps   = 300 # FRAME RATE (the loop method inside the controller will be called each 1/FPS seconds)
   CellularGrid(Controller(), GOLEvolutionModel(), scale, fps)
+'''
 
 The CellularGrid constructor accepts the folloiwng arguments:
     - Controller (The class that implements the call back functions called by the Controller)
