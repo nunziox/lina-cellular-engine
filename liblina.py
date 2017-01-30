@@ -51,7 +51,6 @@ class CellularGrid:
       model  - the chosen evolution model
       scale  - The pixel scale factor
       fps    - The frame rate
-    ''
     """
     self.client = client
     self.model = model
