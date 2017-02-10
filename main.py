@@ -40,7 +40,8 @@ class Controller:
   #
   def init(self, parent):
     self.scene = [Controller.PT_GLIDER, Controller.PT_TRIO, Controller.PT_PULSAR, Controller.PT_GOSPEL, Controller.PT_PERIOD]
-    self.index = -1
+    self.index = 0
+    self.__setPattern(parent)
 
   #
   # This method is called by liblina engine each 1/FPS seconds.
@@ -54,6 +55,9 @@ class Controller:
   #
   def keyPressEvent(self, parent):
     self.index = (self.index + 1) % len(self.scene)
+    self.__setPattern(parent)
+
+  def __setPattern(self, parent):
     parent.setPattern(self.scene[self.index], parent.getPatternCenterPosition(self.scene[self.index]))
 
 #
