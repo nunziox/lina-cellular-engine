@@ -9,6 +9,14 @@ __status__     = "Production"
 
 import pygame
 import copy
+import json
+
+
+class PatternLoader:
+    def load(fileName):
+        with open(fileName) as fp:
+            return json.load(fp)
+
 
 class GOLEvolutionModel:
   """
