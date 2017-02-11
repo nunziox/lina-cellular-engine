@@ -18,20 +18,20 @@ class GOLEvolutionModel:
 #
 # Implements the GOL evolution model
 #
-  def check(self, point, wsum):
+  def evolve(self, cellState, neighbourCount):
     """
     This method implements the evolution rules
     It returns the new cell state ALIVE or DEAD
     """
-    if point == CellularGrid.ALIVE and wsum < 2:
+    if cellState == CellularGrid.ALIVE and neighbourCount < 2:
       return CellularGrid.DEAD  # DIE FOR UNDERPOPULATION
-    elif point == CellularGrid.ALIVE and (wsum == 2 or wsum == 3):
+    elif cellState == CellularGrid.ALIVE and (neighbourCount == 2 or neighbourCount == 3):
       return CellularGrid.ALIVE # LIVES TO THE NEXT GENERATION
-    elif point == CellularGrid.ALIVE and wsum > 3:
+    elif cellState == CellularGrid.ALIVE and neighbourCount > 3:
       return CellularGrid.DEAD  # DIE FOR OVERPOPULATION
-    elif point == CellularGrid.DEAD and wsum == 3:
+    elif cellState == CellularGrid.DEAD and neighbourCount == 3:
       return CellularGrid.ALIVE # REPRODUCTION
-    return point
+    return cellState
 
 class CellularGrid:
   """
