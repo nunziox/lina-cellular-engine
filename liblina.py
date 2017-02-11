@@ -44,17 +44,17 @@ class CellularGrid:
   ALIVE = 1 # PIXEL STATE ALIVE
   DEAD  = 0 # PIXEL STATE DEAD
 
-  def __init__(self, client, model, scale, fps):
+  def __init__(self, controller, model, scale, fps):
     """
     Parameters:
-      client - the controller class
+      controller - the controller class
       model  - the chosen evolution model
       scale  - The pixel scale factor
       fps    - The frame rate
     """
-    self.client = client
-    self.model = model
-    self.scale = scale
+    self.controller = controller 
+    self.model      = model
+    self.scale      = scale
 
     # List used to store the pixels state
     self.point_list = []
@@ -73,16 +73,16 @@ class CellularGrid:
     self.reset()
 
     # Call the init method in the ccontroller class
-    self.client.init(self)
+    self.controller.init(self)
 
     while True:
       # Call the loop method in the controller class
-      self.client.loop(self)
+      self.controller.loop(self)
       for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_ESCAPE:
             exit(0)
-          self.client.keyPressEvent(self)
+          self.controller.keyPressEvent(self)
       clock.tick(fps)
 
   def render(self):
