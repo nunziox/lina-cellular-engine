@@ -76,8 +76,8 @@ class CellularGrid:
     self.controller.init(self)
 
     while True:
-      # Call the loop method in the controller class
-      self.controller.loop(self)
+      self.render()
+      self.evolve()
       for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_ESCAPE:

@@ -44,13 +44,6 @@ class Controller:
     self.__setPattern(parent)
 
   #
-  # This method is called by liblina engine each 1/FPS seconds.
-  #
-  def loop(self, parent):
-    parent.render()
-    parent.evolve()
-
-  #
   # This method is called by liblina engine each time a new key press event occurs.
   #
   def keyPressEvent(self, parent):
