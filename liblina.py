@@ -65,8 +65,8 @@ class CellularGrid:
     self.surface  = pygame.Surface(self.screen.get_size())
     clock         = pygame.time.Clock()
 
-    self.sizeX = width  / self.scale
-    self.sizeY = height / self.scale
+    self.sizeX = int(width  / self.scale)
+    self.sizeY = int(height / self.scale)
     self.array = None
 
     # Resets the board state
