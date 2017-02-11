@@ -52,7 +52,7 @@ class CellularGrid:
       scale  - The pixel scale factor
       fps    - The frame rate
     """
-    self.controller = controller 
+    self.controller = controller
     self.model      = model
     self.scale      = scale
 
@@ -139,8 +139,8 @@ class CellularGrid:
                self.array[(i+1) % self.sizeY][k]                  + \
                self.array[i][(j+1) % self.sizeX]                  + \
                self.array[i][k]
-        state = self.model.check(self.array[i][j], wsum)
-        if state != self.array[i][j]: 
+        state = self.model.evolve(self.array[i][j], wsum)
+        if state != self.array[i][j]:
           newpoints.append((i, j, state))
     self.point_list = []
     for elem in newpoints:
@@ -163,7 +163,7 @@ class CellularGrid:
 
   def getPatternCenterPosition(self, pattern):
     """
-    Returns the offset values along the two axes in order to place the pattern 
+    Returns the offset values along the two axes in order to place the pattern
     in the center of the screen
     """
     a = [x[0] for x in pattern]
