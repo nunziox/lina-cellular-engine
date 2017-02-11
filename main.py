@@ -12,6 +12,9 @@ __status__     = "Production"
 
 from liblina import GOLEvolutionModel, CellularGrid
 
+class NoOpEvolutionModel:
+  def evolve(self, cellState, neighbourCount):
+      return cellState
 
 class Controller:
   #
@@ -62,3 +65,4 @@ if __name__ == "__main__":
   scale = 5  # Each pixel in the grid will be 20 x 20 screen pixels
   fps   = 300 # FRAME RATE (the loop method inside the controller will be called each 1/FPS seconds)
   CellularGrid(Controller(), GOLEvolutionModel(), scale, fps)
+  #CellularGrid(Controller(), NoOpEvolutionModel(), scale, fps)
