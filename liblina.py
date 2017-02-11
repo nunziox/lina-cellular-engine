@@ -106,7 +106,6 @@ class CellularGrid:
     self.array = [[0 for x in range(self.sizeX)] for x in range(self.sizeY)]
     self.surface  = pygame.Surface(self.screen.get_size())
     self.render()
-    self.point_list = []
 
   def evolve(self):
     """
