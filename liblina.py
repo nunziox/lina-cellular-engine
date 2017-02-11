@@ -99,9 +99,6 @@ class CellularGrid:
     """
     Allows to reset the grid state
     """
-    self.dead_list = []
-    for elem in self.point_list:
-      self.dead_list.append((elem[0],elem[1],CellularGrid.DEAD))
     self.point_list = []
     self.array = [[0 for x in range(self.sizeX)] for x in range(self.sizeY)]
     self.surface  = pygame.Surface(self.screen.get_size())
