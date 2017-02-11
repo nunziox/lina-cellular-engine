@@ -38,20 +38,20 @@ class Controller:
   #
   # Use this method to init your variables
   #
-  def init(self, parent):
+  def init(self, grid):
     self.scene = [Controller.PT_GLIDER, Controller.PT_TRIO, Controller.PT_PULSAR, Controller.PT_GOSPEL, Controller.PT_PERIOD]
     self.index = 0
-    self.__setPattern(parent)
+    self.__setPattern(grid)
 
   #
   # This method is called by liblina engine each time a new key press event occurs.
   #
-  def keyPressEvent(self, parent):
+  def keyPressEvent(self, grid):
     self.index = (self.index + 1) % len(self.scene)
-    self.__setPattern(parent)
+    self.__setPattern(grid)
 
-  def __setPattern(self, parent):
-    parent.setPattern(self.scene[self.index], parent.getPatternCenterPosition(self.scene[self.index]))
+  def __setPattern(self, grid):
+    grid.setPattern(self.scene[self.index], grid.getPatternCenterPosition(self.scene[self.index]))
 
 #
 # Main
