@@ -40,6 +40,7 @@ class Controller:
   #
   def init(self, grid):
     self.scene = [Controller.PT_GLIDER, Controller.PT_TRIO, Controller.PT_PULSAR, Controller.PT_GOSPEL, Controller.PT_PERIOD]
+    # display first pattern at startup
     self.index = 0
     self.__setPattern(grid)
 
@@ -47,6 +48,7 @@ class Controller:
   # This method is called by liblina engine each time a new key press event occurs.
   #
   def keyPressEvent(self, grid):
+    # when a key is pressed, display next pattern
     self.index = (self.index + 1) % len(self.scene)
     self.__setPattern(grid)
 
