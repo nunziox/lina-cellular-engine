@@ -17,9 +17,9 @@ class GOLEvolutionModel:
   Describes the evolution rules of the cellular grid.
   """
 
-#
-# Implements the GOL evolution model
-#
+  #
+  # Implements the GOL evolution model
+  #
   def evolve(self, cellState, neighbourCount):
     """
     This method implements the evolution rules
