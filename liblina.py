@@ -91,9 +91,9 @@ class CellularGrid:
     """
     Renders the grid state on the screen using the pygame lib
     """
-    for elem in self.point_list:
-      color = (0,0,0) if elem[2] == CellularGrid.DEAD else (255,255,255)
-      pygame.draw.rect(self.surface, color, pygame.Rect(elem[1]*self.scale,elem[0]*self.scale,self.scale,self.scale))
+    for p in self.point_list:
+      color = (0,0,0) if p[2] == CellularGrid.DEAD else (255,255,255)
+      pygame.draw.rect(self.surface, color, pygame.Rect(p[1]*self.scale,p[0]*self.scale,self.scale,self.scale))
     self.screen.blit(self.surface, (0,0))
     pygame.display.flip()
 
