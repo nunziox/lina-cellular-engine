@@ -11,11 +11,7 @@ __status__     = "Production"
 
 import json
 from os import stat
-from liblina import GOLEvolutionModel, CellularGrid
-
-class NoOpEvolutionModel:
-  def evolve(self, cellState, neighbourCount):
-      return cellState
+from liblina import NoOpEvolutionModel, GOLEvolutionModel, CellularGrid
 
 class Controller:
 

@@ -12,6 +12,11 @@ import copy
 import json
 
 
+class NoOpEvolutionModel:
+  def evolve(self, cellState, neighbourCount):
+      return cellState
+
+
 class GOLEvolutionModel:
   """
   Describes the evolution rules of the cellular grid.
