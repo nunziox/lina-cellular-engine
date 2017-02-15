@@ -9,6 +9,8 @@ __status__     = "Production"
 
 import pygame
 import copy
+import json
+
 
 class GOLEvolutionModel:
   """
@@ -18,20 +20,20 @@ class GOLEvolutionModel:
 #
 # Implements the GOL evolution model
 #
-  def check(self, point, wsum):
+  def evolve(self, cellState, neighbourCount):
     """
     This method implements the evolution rules
     It returns the new cell state ALIVE or DEAD
     """
-    if point == CellularGrid.ALIVE and wsum < 2:
+    if cellState == CellularGrid.ALIVE and neighbourCount < 2:
       return CellularGrid.DEAD  # DIE FOR UNDERPOPULATION
-    elif point == CellularGrid.ALIVE and (wsum == 2 or wsum == 3):
+    elif cellState == CellularGrid.ALIVE and (neighbourCount == 2 or neighbourCount == 3):
       return CellularGrid.ALIVE # LIVES TO THE NEXT GENERATION
-    elif point == CellularGrid.ALIVE and wsum > 3:
+    elif cellState == CellularGrid.ALIVE and neighbourCount > 3:
       return CellularGrid.DEAD  # DIE FOR OVERPOPULATION
-    elif point == CellularGrid.DEAD and wsum == 3:
+    elif cellState == CellularGrid.DEAD and neighbourCount == 3:
       return CellularGrid.ALIVE # REPRODUCTION
-    return point
+    return cellState
 
 class CellularGrid:
   """
@@ -44,17 +46,17 @@ class CellularGrid:
   ALIVE = 1 # PIXEL STATE ALIVE
   DEAD  = 0 # PIXEL STATE DEAD
 
-  def __init__(self, client, model, scale, fps):
+  def __init__(self, controller, model, scale, fps):
     """
     Parameters:
-      client - the controller class
+      controller - the controller class
       model  - the chosen evolution model
       scale  - The pixel scale factor
       fps    - The frame rate
     """
-    self.client = client
-    self.model = model
-    self.scale = scale
+    self.controller = controller
+    self.model      = model
+    self.scale      = scale
 
     # List used to store the pixels state
     self.point_list = []
@@ -73,16 +75,16 @@ class CellularGrid:
     self.reset()
 
     # Call the init method in the ccontroller class
-    self.client.init(self)
+    self.controller.init(self)
 
     while True:
-      # Call the loop method in the controller class
-      self.client.loop(self)
+      self.render()
+      self.evolve()
       for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
           if event.key == pygame.K_ESCAPE:
             exit(0)
-          self.client.keyPressEvent(self)
+          self.controller.keyPressEvent(self)
       clock.tick(fps)
 
   def render(self):
@@ -99,14 +101,10 @@ class CellularGrid:
     """
     Allows to reset the grid state
     """
-    self.dead_list = []
-    for elem in self.point_list:
-      self.dead_list.append((elem[0],elem[1],CellularGrid.DEAD))
     self.point_list = []
     self.array = [[0 for x in range(self.sizeX)] for x in range(self.sizeY)]
     self.surface  = pygame.Surface(self.screen.get_size())
     self.render()
-    self.point_list = []
 
   def evolve(self):
     """
@@ -140,8 +138,8 @@ class CellularGrid:
                self.array[(i+1) % self.sizeY][k]                  + \
                self.array[i][(j+1) % self.sizeX]                  + \
                self.array[i][k]
-        state = self.model.check(self.array[i][j], wsum)
-        if state != self.array[i][j]: 
+        state = self.model.evolve(self.array[i][j], wsum)
+        if state != self.array[i][j]:
           newpoints.append((i, j, state))
     self.point_list = []
     for elem in newpoints:
@@ -164,7 +162,7 @@ class CellularGrid:
 
   def getPatternCenterPosition(self, pattern):
     """
-    Returns the offset values along the two axes in order to place the pattern 
+    Returns the offset values along the two axes in order to place the pattern
     in the center of the screen
     """
     a = [x[0] for x in pattern]
