@@ -7,7 +7,7 @@ Lina actually implement only one Evolution Model, The Conway's Game Of Life!
 
 ## How to run
 
-`python main.py`
+`python main.py --fps 20 --scale 10`
 
 You may need to install pygame in you enviroment.
 
